@@ -1,3 +1,2 @@
 #!/bin/bash
-IFS=. read a b c d <<< "$1"; IFS=. read e f g h <<< "$2"; printf "%d.%d.%d.%d\n" $((a|255-e)) $((b|255-f)) $((c|255-g)) $((d|255-h))
-
+IFS='.' read -r a b c d <<< "$1"; ip=$(( (a<<24)|(b<<16)|(c<<8)|d )); IFS='.' read -r a b c d <<< "$2"; mask=$(( (a<<24)|(b<<16)|(c<<8)|d )); bc=$(( ip|(~mask&0xFFFFFFFF) )); printf "%d.%d.%d.%d" $(( (bc>>24)&255 )) $(( (bc>>16)&255 )) $(( (bc>>8)&255 )) $(( bc&255 ))
