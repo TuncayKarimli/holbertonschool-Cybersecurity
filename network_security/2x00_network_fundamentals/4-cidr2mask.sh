@@ -1,2 +1,2 @@
 #!/bin/bash
-mask=$((0xffffffff << (32 - $1))); octets=($((mask>>24 & 255)) $((mask>>16 & 255)) $((mask>>8 & 255)) $((mask & 255))); echo "${octets[*]/ /.}"
+python3 -c "import sys; c=int(sys.argv[1]); m=0xFFFFFFFF^((1<<(32-c))-1); print('.'.join([str((m>>i)&0xFF) for i in [24,16,8,0]]))" $1
