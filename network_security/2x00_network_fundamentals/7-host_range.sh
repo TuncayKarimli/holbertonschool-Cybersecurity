@@ -1,2 +1,3 @@
 #!/bin/bash
-arg1=$(echo "$1" | tr -d '\r '); mask_val=$((0xffffffff << (32 - $2))); IFS='.'; ip=($arg1); m=($((mask_val>>24 & 255)) $((mask_val>>16 & 255)) $((mask_val>>8 & 255)) $((mask_val & 255))); net=($((ip[0] & m[0])) $((ip[1] & m[1])) $((ip[2] & m[2])) $((ip[3] & m[3]))); bcast=($((net[0] | (m[0] ^ 255))) $((net[1] | (m[1] ^ 255))) $((net[2] | (m[2] ^ 255))) $((net[3] | (m[3] ^ 255)))); echo "${net[0]}.${net[1]}.${net[2]}.$((net[3] + 1)) - ${bcast[0]}.${bcast[1]}.${bcast[2]}.$((bcast[3] - 1))"
+IFS='.'; ip=($1); m=$((0xffffffff << (32 - $2))); ip_num=$(( (ip[0]<<24) | (ip[1]<<16) | (ip[2]<<8) | ip[3] ))
+net=$((ip_num & m)); bcast=$((net | (~m & 0xffffffff))); echo "$(( (net+1)>>24 & 255 )).$(( (net+1)>>16 & 255 )).$(( (net+1)>>8 & 255 )).$(( (net+1) & 255 )) - $(( (bcast-1)>>24 & 255 )).$(( (bcast-1)>>16 & 255 )).$(( (bcast-1)>>8 & 255 )).$(( (bcast-1) & 255 ))"
