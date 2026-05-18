@@ -1,2 +1,2 @@
 #!/bin/bash
-arg1=$(echo "$1" | tr -d '\r '); arg2=$(echo "$2" | tr -d '\r '); IFS='.'; ip=($arg1); mask=($arg2); echo "$((ip[0] | (mask[0] ^ 255))).$((ip[1] | (mask[1] ^ 255))).$((ip[2] | (mask[2] ^ 255))).$((ip[3] | (mask[3] ^ 255)))"
+IFS='.' read -r i1 i2 i3 i4 <<< "$1"; IFS='.' read -r m1 m2 m3 m4 <<< "$2"; echo "$((i1|(255-m1))).$((i2|(255-m2))).$((i3|(255-m3))).$((i4|(255-m4)))"
